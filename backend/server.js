@@ -45,11 +45,27 @@ app.use('/api/reports', reportsRouter);
 app.use('/api/insights', insightsRouter);
 
 // ---------------------------------------------------------------------------
-// 404 handler
+// 404 handler (and React Router fallback)
 // ---------------------------------------------------------------------------
-app.use((req, res) => {
-  res.status(404).json({ error: `Route not found: ${req.method} ${req.path}` });
-});
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+if (process.env.NODE_ENV === 'production') {
+  // Serve static files from the React frontend app
+  app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+  // Anything that doesn't match an API route goes to index.html
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+  });
+} else {
+  app.use((req, res) => {
+    res.status(404).json({ error: `Route not found: ${req.method} ${req.path}` });
+  });
+}
 
 // ---------------------------------------------------------------------------
 // Global error handler — ensures no unhandled exceptions reach the client
