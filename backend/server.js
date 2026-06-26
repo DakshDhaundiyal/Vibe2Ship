@@ -4,6 +4,8 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import reportsRouter from './routes/reports.js';
 import insightsRouter from './routes/insights.js';
 
@@ -47,9 +49,6 @@ app.use('/api/insights', insightsRouter);
 // ---------------------------------------------------------------------------
 // 404 handler (and React Router fallback)
 // ---------------------------------------------------------------------------
-import path from 'path';
-import { fileURLToPath } from 'url';
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
