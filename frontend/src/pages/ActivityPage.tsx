@@ -98,22 +98,27 @@ export default function ActivityPage() {
             >
               <MagicCard className="rounded-2xl w-full" clickEffect={false}>
                 <div
-                  className="bg-[#111] border border-[#222] rounded-2xl p-6 flex items-center justify-between cursor-pointer select-none"
+                  className="bg-[#111] border border-[#222] rounded-2xl relative cursor-pointer select-none overflow-hidden"
                   onClick={() => setStatsExpanded(true)}
                 >
-                  <div className="flex flex-col items-center flex-1">
-                    <p className="text-[32px] font-semibold tracking-tighter leading-none text-white">{STATS.submitted}</p>
-                    <p className="text-[#666] text-[12px] font-medium mt-2 text-center">Submitted</p>
+                  <div className="flex items-center justify-between p-6 pb-8">
+                    <div className="flex flex-col items-center flex-1">
+                      <p className="text-[32px] font-semibold tracking-tighter leading-none text-white">{STATS.submitted}</p>
+                      <p className="text-[#666] text-[12px] font-medium mt-2 text-center">Submitted</p>
+                    </div>
+                    <div className="w-px h-10 bg-[#222]" />
+                    <div className="flex flex-col items-center flex-1">
+                      <p className="text-[32px] font-semibold tracking-tighter leading-none text-emerald-400">{STATS.resolved}</p>
+                      <p className="text-[#666] text-[12px] font-medium mt-2 text-center">Resolved</p>
+                    </div>
+                    <div className="w-px h-10 bg-[#222]" />
+                    <div className="flex flex-col items-center flex-1">
+                      <p className="text-[32px] font-semibold tracking-tighter leading-none text-sky-400">{STATS.verified}</p>
+                      <p className="text-[#666] text-[12px] font-medium mt-2 text-center leading-tight">Verified<br />by You</p>
+                    </div>
                   </div>
-                  <div className="w-px h-10 bg-[#222]" />
-                  <div className="flex flex-col items-center flex-1">
-                    <p className="text-[32px] font-semibold tracking-tighter leading-none text-emerald-400">{STATS.resolved}</p>
-                    <p className="text-[#666] text-[12px] font-medium mt-2 text-center">Resolved</p>
-                  </div>
-                  <div className="w-px h-10 bg-[#222]" />
-                  <div className="flex flex-col items-center flex-1">
-                    <p className="text-[32px] font-semibold tracking-tighter leading-none text-sky-400">{STATS.verified}</p>
-                    <p className="text-[#666] text-[12px] font-medium mt-2 text-center leading-tight">Verified<br />by You</p>
+                  <div className="absolute bottom-1.5 left-0 right-0 flex justify-center text-[#444] pointer-events-none">
+                    <ChevronDown size={16} />
                   </div>
                 </div>
               </MagicCard>
