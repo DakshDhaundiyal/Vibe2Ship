@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+build/
+.vite/
+
+# Environment files (NEVER commit these)
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Runtime data
+pids/
+*.pid
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.vscode/settings.json
+.idea/
+
+# Temporary files
+*.tmp
+*.swp
