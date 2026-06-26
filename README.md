@@ -1,6 +1,7 @@
 # Community Hero 🦸
 
 > A hyperlocal civic issue reporting platform. Citizens report problems by photo — AI classifies and scores severity. Reports are geo-tagged, deduplicated against nearby similar reports, community-verified, tracked through a status pipeline, and surfaced on a public map + impact dashboard.
+> Deployed on Google Cloud Run.
 
 ---
 
