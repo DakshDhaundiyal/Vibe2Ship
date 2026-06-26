@@ -88,4 +88,5 @@ export const STATUS_ORDER: ReportStatus[] = [
   'pending_verification', 'verified', 'assigned', 'in_progress', 'resolved', 'suspicious'
 ]
 
-export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001'
+// If we are in production, the frontend and backend are on the same domain (Node serves React)
+export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || (import.meta.env.PROD ? '' : 'http://localhost:3001');
