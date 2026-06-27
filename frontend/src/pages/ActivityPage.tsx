@@ -44,9 +44,9 @@ const VERIFIED_ISSUES = [
 ];
 
 const RESOLVED_HISTORY = [
-  { id: "h1", category: "Garbage issue fixed", date: "June 24" },
-  { id: "h2", category: "Water leakage repaired", date: "June 22" },
-  { id: "h3", category: "Fallen tree removed", date: "June 20" },
+  { id: "h1", category: "Garbage issue fixed", location: "JM Road, Pune", date: "June 24" },
+  { id: "h2", category: "Water leakage repaired", location: "Baner, Pune", date: "June 22" },
+  { id: "h3", category: "Fallen tree removed", location: "Koregaon Park, Pune", date: "June 20" },
 ];
 
 const STATUS_STEPS = [
@@ -172,17 +172,22 @@ export default function ActivityPage() {
         </div>
       </div>
 
-      {/* 5. Resolved History (Text-only layout) */}
+      {/* 5. Resolved History */}
       <div className="mb-8">
-        <h2 className="text-[14px] font-medium text-[#666] mb-6">History</h2>
-        <div className="space-y-1">
+        <h2 className="text-[18px] font-bold text-white tracking-tight mb-4">History</h2>
+        <div className="space-y-3">
           {RESOLVED_HISTORY.map(history => (
-            <div key={history.id} className="flex items-center justify-between py-4 border-b border-[#111] last:border-0">
+            <div key={history.id} className="bento-glass-sm p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <CheckCircle2 size={14} className="text-[#444]" />
-                <p className="text-[#ccc] text-[15px] tracking-tight">{history.category}</p>
+                <div className="w-8 h-8 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
+                  <CheckCircle2 size={16} className="text-emerald-500" />
+                </div>
+                <div>
+                  <p className="text-white font-semibold text-[14px] tracking-tight leading-tight">{history.category}</p>
+                  <p className="text-[#888] text-[12px] mt-0.5">{history.location}</p>
+                </div>
               </div>
-              <p className="text-[#666] text-[13px]">{history.date}</p>
+              <p className="text-[#666] text-[11px] font-medium uppercase tracking-wider">{history.date}</p>
             </div>
           ))}
         </div>
