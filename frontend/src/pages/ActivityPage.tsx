@@ -76,6 +76,7 @@ const getStepState = (currentStatus: string, stepKey: string) => {
 
 export default function ActivityPage() {
   const [expandedReportId, setExpandedReportId] = useState<string | null>(null);
+  const [statsExpanded, setStatsExpanded] = useState(false);
 
   return (
     <div className="p-5 pt-12 pb-32 min-h-screen text-[#ededed] selection:bg-sky-500/30 font-sans" style={{ maxWidth: 500, margin: '0 auto', backgroundColor: '#000' }}>
@@ -83,23 +84,98 @@ export default function ActivityPage() {
       {/* Page Title */}
       <h1 className="text-[32px] font-bold tracking-tight mb-6 text-white">Activity</h1>
 
-      {/* 1. Bento Stats Grid */}
-      <div className="grid grid-cols-3 gap-3 mb-8">
-        <div className="bento-glass-sm p-4 flex flex-col items-center justify-center text-center relative overflow-hidden group col-span-1 rounded-2xl border border-white/5 bg-white/5">
-          <div className="absolute inset-0 bg-gradient-to-t from-white/5 to-transparent"></div>
-          <p className="text-white text-[32px] font-bold tracking-tighter leading-none z-10">{STATS.submitted}</p>
-          <p className="text-[#888] text-[11px] font-semibold mt-1 uppercase tracking-wider z-10">Submitted</p>
-        </div>
-        <div className="bento-glass-sm p-4 flex flex-col items-center justify-center text-center relative overflow-hidden group col-span-1 rounded-2xl border border-emerald-500/20 bg-emerald-500/5">
-          <div className="absolute inset-0 bg-gradient-to-t from-emerald-500/10 to-transparent"></div>
-          <p className="text-emerald-400 text-[32px] font-bold tracking-tighter leading-none z-10">{STATS.resolved}</p>
-          <p className="text-emerald-500/70 text-[11px] font-semibold mt-1 uppercase tracking-wider z-10">Resolved</p>
-        </div>
-        <div className="bento-glass-sm p-4 flex flex-col items-center justify-center text-center relative overflow-hidden group col-span-1 rounded-2xl border border-sky-500/20 bg-sky-500/5">
-          <div className="absolute inset-0 bg-gradient-to-t from-sky-500/10 to-transparent"></div>
-          <p className="text-sky-400 text-[32px] font-bold tracking-tighter leading-none z-10">{STATS.verified}</p>
-          <p className="text-sky-500/70 text-[11px] font-semibold mt-1 uppercase tracking-wider z-10">Verified</p>
-        </div>
+      {/* 1. Stats Card — tap to expand */}
+      <div className="mb-10">
+        <AnimatePresence mode="wait">
+          {!statsExpanded ? (
+            <motion.div
+              key="collapsed"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25 }}
+            >
+              <div
+                className="bento-glass-sm p-6 rounded-2xl flex items-center justify-between cursor-pointer select-none"
+                onClick={() => setStatsExpanded(true)}
+              >
+                <div className="flex flex-col items-center flex-1">
+                  <p className="text-[32px] font-bold tracking-tighter leading-none text-white">{STATS.submitted}</p>
+                  <p className="text-[#888] text-[11px] font-semibold mt-2 uppercase tracking-wider">Submitted</p>
+                </div>
+                <div className="w-px h-10 bg-white/10" />
+                <div className="flex flex-col items-center flex-1">
+                  <p className="text-[32px] font-bold tracking-tighter leading-none text-emerald-400">{STATS.resolved}</p>
+                  <p className="text-emerald-500/70 text-[11px] font-semibold mt-2 uppercase tracking-wider">Resolved</p>
+                </div>
+                <div className="w-px h-10 bg-white/10" />
+                <div className="flex flex-col items-center flex-1">
+                  <p className="text-[32px] font-bold tracking-tighter leading-none text-sky-400">{STATS.verified}</p>
+                  <p className="text-sky-500/70 text-[11px] font-semibold mt-2 text-center leading-tight uppercase tracking-wider">Verified<br />by You</p>
+                </div>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="expanded"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25 }}
+              className="flex flex-col gap-3"
+            >
+              {[
+                {
+                  count: STATS.submitted,
+                  color: 'text-white',
+                  accent: 'bg-white/5 border-white/10',
+                  title: 'You put it on the map.',
+                  sub: 'Every issue you reported is a step toward a better city.',
+                },
+                {
+                  count: STATS.resolved,
+                  color: 'text-emerald-400',
+                  accent: 'bg-emerald-500/10 border-emerald-500/20',
+                  title: 'Real change, thanks to you.',
+                  sub: 'These fixes happened because you spoke up. The city heard you.',
+                },
+                {
+                  count: STATS.verified,
+                  color: 'text-sky-400',
+                  accent: 'bg-sky-500/10 border-sky-500/20',
+                  title: 'You made it count.',
+                  sub: 'Your on-ground verification gave these issues the credibility to act on.',
+                },
+              ].map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.07, duration: 0.3 }}
+                >
+                  <div
+                    className="bento-glass-sm rounded-2xl px-5 py-5 flex items-center gap-5 cursor-pointer"
+                    onClick={() => i === 0 && setStatsExpanded(false)}
+                  >
+                    <div className={`w-14 h-14 rounded-2xl border flex items-center justify-center shrink-0 ${item.accent}`}>
+                      <p className={`text-[26px] font-bold tracking-tighter leading-none ${item.color}`}>{item.count}</p>
+                    </div>
+                    <div>
+                      <p className="text-white text-[15px] font-bold tracking-tight leading-snug">{item.title}</p>
+                      <p className="text-[#888] text-[13px] mt-1 leading-relaxed">{item.sub}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+              <button
+                onClick={() => setStatsExpanded(false)}
+                className="text-[#666] text-[12px] font-semibold uppercase tracking-wider text-center py-2 hover:text-[#888] transition-colors mt-2"
+              >
+                Collapse Stats
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* 2. My Reports */}
