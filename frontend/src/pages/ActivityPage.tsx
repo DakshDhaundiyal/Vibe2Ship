@@ -96,22 +96,29 @@ export default function ActivityPage() {
               transition={{ duration: 0.25 }}
             >
               <div
-                className="bento-glass-sm p-6 rounded-2xl flex items-center justify-between cursor-pointer select-none"
+                className="bento-glass-sm p-6 pb-8 rounded-2xl flex flex-col relative cursor-pointer select-none"
                 onClick={() => setStatsExpanded(true)}
               >
-                <div className="flex flex-col items-center flex-1">
-                  <p className="text-[32px] font-bold tracking-tighter leading-none text-white">{STATS.submitted}</p>
-                  <p className="text-[#888] text-[11px] font-semibold mt-2 uppercase tracking-wider">Submitted</p>
+                <div className="flex items-center justify-between w-full">
+                  <div className="flex flex-col items-center flex-1">
+                    <p className="text-[32px] font-bold tracking-tighter leading-none text-white">{STATS.submitted}</p>
+                    <p className="text-[#888] text-[11px] font-semibold mt-2 uppercase tracking-wider">Submitted</p>
+                  </div>
+                  <div className="w-px h-10 bg-white/10" />
+                  <div className="flex flex-col items-center flex-1">
+                    <p className="text-[32px] font-bold tracking-tighter leading-none text-emerald-400">{STATS.resolved}</p>
+                    <p className="text-emerald-500/70 text-[11px] font-semibold mt-2 uppercase tracking-wider">Resolved</p>
+                  </div>
+                  <div className="w-px h-10 bg-white/10" />
+                  <div className="flex flex-col items-center flex-1">
+                    <p className="text-[32px] font-bold tracking-tighter leading-none text-sky-400">{STATS.verified}</p>
+                    <p className="text-sky-500/70 text-[11px] font-semibold mt-2 text-center leading-tight uppercase tracking-wider">Verified<br />by You</p>
+                  </div>
                 </div>
-                <div className="w-px h-10 bg-white/10" />
-                <div className="flex flex-col items-center flex-1">
-                  <p className="text-[32px] font-bold tracking-tighter leading-none text-emerald-400">{STATS.resolved}</p>
-                  <p className="text-emerald-500/70 text-[11px] font-semibold mt-2 uppercase tracking-wider">Resolved</p>
-                </div>
-                <div className="w-px h-10 bg-white/10" />
-                <div className="flex flex-col items-center flex-1">
-                  <p className="text-[32px] font-bold tracking-tighter leading-none text-sky-400">{STATS.verified}</p>
-                  <p className="text-sky-500/70 text-[11px] font-semibold mt-2 text-center leading-tight uppercase tracking-wider">Verified<br />by You</p>
+                
+                {/* Expand Indicator Arrow */}
+                <div className="absolute bottom-2 left-0 right-0 flex justify-center text-[#666]">
+                  <ChevronDown size={18} className="animate-bounce" />
                 </div>
               </div>
             </motion.div>
