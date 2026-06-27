@@ -9,21 +9,21 @@ import toast from 'react-hot-toast';
 // Simple haversine formula for demo
 function getDistanceMeters(lat1: number, lon1: number, lat2: number, lon2: number) {
   const R = 6371e3;
-  const p1 = lat1 * Math.PI/180;
-  const p2 = lat2 * Math.PI/180;
-  const dp = (lat2-lat1) * Math.PI/180;
-  const dl = (lon2-lon1) * Math.PI/180;
-  const a = Math.sin(dp/2) * Math.sin(dp/2) +
-            Math.cos(p1) * Math.cos(p2) *
-            Math.sin(dl/2) * Math.sin(dl/2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  const p1 = lat1 * Math.PI / 180;
+  const p2 = lat2 * Math.PI / 180;
+  const dp = (lat2 - lat1) * Math.PI / 180;
+  const dl = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dp / 2) * Math.sin(dp / 2) +
+    Math.cos(p1) * Math.cos(p2) *
+    Math.sin(dl / 2) * Math.sin(dl / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c;
 }
 
 export default function HomePage() {
   const navigate = useNavigate();
   const [pendingReports, setPendingReports] = useState<(Report & { distance?: number })[]>([]);
-  const [userLoc, setUserLoc] = useState<{lat: number, lng: number} | null>(null);
+  const [userLoc, setUserLoc] = useState<{ lat: number, lng: number } | null>(null);
 
   // Verification modal state
   const [verifyReport, setVerifyReport] = useState<(Report & { distance?: number }) | null>(null);
@@ -106,7 +106,7 @@ export default function HomePage() {
         .from('reports')
         .select('*')
         .eq('status', 'reported');
-      
+
       if (data && userLoc) {
         const VALID_CATEGORIES = ['pothole', 'garbage', 'water_leak', 'fallen_tree', 'broken_sidewalk'];
         const withDistance = data
@@ -117,7 +117,7 @@ export default function HomePage() {
           }))
           .filter(r => r.distance !== undefined && r.distance <= 500)
           .sort((a, b) => (a.distance || 0) - (b.distance || 0));
-        
+
         setPendingReports(withDistance.slice(0, 3)); // show top 3 closest
       }
     }
@@ -126,7 +126,7 @@ export default function HomePage() {
 
   return (
     <div className="p-5 pt-12 pb-32 min-h-screen text-[#ededed] selection:bg-sky-500/30 font-sans" style={{ maxWidth: 500, margin: '0 auto', backgroundColor: '#000' }}>
-      
+
       {/* 1. Welcome Header (Full Width) */}
       <div className="mb-6 flex justify-between items-end">
         <div>
@@ -141,7 +141,7 @@ export default function HomePage() {
       {/* 2. Action Bento Grid (2x2) */}
       <div className="grid grid-cols-2 gap-3 mb-3">
         {/* Big Report Button */}
-        <button 
+        <button
           onClick={() => navigate('/report')}
           className="bento-glass p-5 flex flex-col items-start justify-between h-[160px] relative overflow-hidden group col-span-1"
         >
@@ -157,7 +157,7 @@ export default function HomePage() {
 
         <div className="grid grid-rows-2 gap-3 col-span-1 h-[160px]">
           {/* Mini Stats Rectangle */}
-          <button 
+          <button
             onClick={() => navigate('/activity')}
             className="bento-glass-sm p-4 flex flex-col justify-center relative overflow-hidden group h-full"
           >
@@ -183,23 +183,25 @@ export default function HomePage() {
       </div>
 
       {/* 3. Map Widget */}
-      <button 
-        onClick={() => navigate('/map')}
-        className="bento-glass w-full h-[140px] mb-6 p-4 relative overflow-hidden group flex flex-col justify-end"
-      >
-        <div className="absolute inset-0 opacity-40 group-hover:opacity-60 transition-opacity bg-[url('https://maps.geoapify.com/v1/staticmap?style=dark-matter&width=600&height=300&center=lonlat:77.0266,28.4595&zoom=14&apiKey=556c4bd3f45749dfb3252a129d2bfebc')] bg-cover bg-center"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-        
-        <div className="relative z-10 flex justify-between items-end w-full">
-          <div className="text-left">
-            <h3 className="text-white font-semibold text-[17px] tracking-tight">Interactive Map</h3>
-            <p className="text-[#aaa] text-[13px]">12 active issues nearby</p>
+      <MagicCard className="w-full mb-6 rounded-[28px]">
+        <button
+          onClick={() => navigate('/map')}
+          className="bento-glass w-full h-[140px] p-4 relative overflow-hidden group flex flex-col justify-end"
+        >
+          <div className="absolute inset-0 opacity-40 group-hover:opacity-60 transition-opacity bg-[url('https://maps.geoapify.com/v1/staticmap?style=dark-matter&width=600&height=300&center=lonlat:77.0266,28.4595&zoom=14&apiKey=556c4bd3f45749dfb3252a129d2bfebc')] bg-cover bg-center"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+
+          <div className="relative z-10 flex justify-between items-end w-full">
+            <div className="text-left">
+              <h3 className="text-white font-semibold text-[17px] tracking-tight">Interactive Map</h3>
+              <p className="text-[#aaa] text-[13px]">12 active issues nearby</p>
+            </div>
+            <div className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/10">
+              <MapPin size={14} className="text-white" />
+            </div>
           </div>
-          <div className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/10">
-            <MapPin size={14} className="text-white" />
-          </div>
-        </div>
-      </button>
+        </button>
+      </MagicCard>
 
       {/* 4. Verification Bento Carousel */}
       {pendingReports.length > 0 && (
@@ -211,7 +213,7 @@ export default function HomePage() {
               &lt;50m
             </span>
           </div>
-          
+
           <div className="flex gap-3 overflow-x-auto pb-4 -mx-5 px-5 snap-x hide-scrollbar">
             {pendingReports.map(report => (
               <div key={report.id} className="min-w-[240px] snap-start h-full">
@@ -225,7 +227,7 @@ export default function HomePage() {
                         {report.distance ? Math.round(report.distance) : '?'}m
                       </span>
                     </div>
-                    
+
                     <p className="text-white font-semibold text-[15px] tracking-tight mb-1 leading-tight">
                       {report.category === 'other'
                         ? (report.ai_reasoning ? report.ai_reasoning.split('.')[0].slice(0, 35) + '…' : 'Civic Issue')
@@ -241,13 +243,12 @@ export default function HomePage() {
                     const dist = report.distance ?? Infinity;
                     const isClose = dist <= 50;
                     return (
-                      <button 
+                      <button
                         onClick={() => isClose && setVerifyReport(report)}
-                        className={`w-full font-medium py-2.5 rounded-xl text-[13px] transition-colors border ${
-                          isClose 
-                            ? 'bg-white text-black border-transparent hover:bg-gray-200' 
+                        className={`w-full font-medium py-2.5 rounded-xl text-[13px] transition-colors border ${isClose
+                            ? 'bg-white text-black border-transparent hover:bg-gray-200'
                             : 'bg-transparent border-white/10 text-[#555] cursor-not-allowed'
-                        }`}
+                          }`}
                         disabled={!isClose}
                       >
                         {isClose ? 'Verify Issue' : 'Too far to verify'}
@@ -292,7 +293,7 @@ export default function HomePage() {
               To verify this issue and earn <strong className="text-sky-400 font-semibold">10 XP</strong>, please upload a real-time photo showing the current status.
             </p>
 
-            <div 
+            <div
               className="border-2 border-dashed border-white/10 rounded-2xl p-6 text-center mb-6 cursor-pointer hover:bg-white/5 transition-colors relative overflow-hidden bg-black/40"
               onClick={() => fileInputRef.current?.click()}
             >
@@ -307,7 +308,7 @@ export default function HomePage() {
                   <p className="text-[#666] text-[12px] mt-1">Required for verification</p>
                 </div>
               )}
-              <input 
+              <input
                 type="file"
                 accept="image/*"
                 capture="environment"
@@ -319,11 +320,10 @@ export default function HomePage() {
             <button
               onClick={handleSubmitVerification}
               disabled={confirming || !photoFile}
-              className={`w-full py-4 rounded-xl font-bold text-[15px] flex items-center justify-center gap-2 transition-all ${
-                photoFile && !confirming
+              className={`w-full py-4 rounded-xl font-bold text-[15px] flex items-center justify-center gap-2 transition-all ${photoFile && !confirming
                   ? 'bg-white text-black hover:scale-[0.98]'
                   : 'bg-white/10 text-[#666] cursor-not-allowed'
-              }`}
+                }`}
             >
               {confirming ? (
                 <span className="w-5 h-5 border-2 border-[#666] border-t-white rounded-full animate-spin"></span>
