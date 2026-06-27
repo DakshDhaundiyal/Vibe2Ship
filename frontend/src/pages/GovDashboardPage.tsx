@@ -180,132 +180,110 @@ export default function GovDashboardPage() {
   const top3Urgent = urgentQueue.slice(0, 3);
 
   return (
-    <div className="p-6 pt-12 pb-32 min-h-screen text-[#ededed] selection:bg-sky-500/30" style={{ maxWidth: 500, margin: '0 auto', backgroundColor: '#000' }}>
+    <div className="p-5 pt-12 pb-32 min-h-screen text-[#ededed] selection:bg-sky-500/30 font-sans" style={{ maxWidth: 500, margin: '0 auto', backgroundColor: '#000' }}>
       
-      {/* Premium Header (No big container, just text + live dot) */}
-      <div className="mb-20 flex justify-between items-start mt-4">
+      {/* Premium Header */}
+      <div className="mb-6 flex justify-between items-end">
         <div>
-          <h1 className="text-[32px] font-semibold tracking-tighter mb-1 text-white">Response Center</h1>
-          <p className="text-[#666] font-medium text-[15px] tracking-tight">Real-time city infrastructure.</p>
+          <p className="text-[#888] font-medium text-[13px] tracking-wide uppercase mb-1">Command Center</p>
+          <h1 className="text-[32px] font-bold tracking-tight leading-none text-white">Dashboard</h1>
         </div>
-        <div className="flex items-center gap-2 mt-2 px-2.5 py-1 rounded-full bg-[#111] border border-[#222]">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span className="text-[11px] font-medium text-[#888]">Live</span>
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bento-glass-sm bg-emerald-500/10 border-emerald-500/20">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span className="text-[12px] font-semibold text-emerald-400">Live</span>
         </div>
       </div>
 
-      {/* Main Urgent Queue */}
+      {/* 1. Metrics Bento Grid (2x2) */}
+      <div className="grid grid-cols-2 gap-3 mb-8">
+        <div className="bento-glass-sm p-4 relative overflow-hidden group col-span-1 rounded-2xl">
+          <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
+          <p className="text-[#888] text-[12px] font-semibold uppercase tracking-wider mb-2 relative z-10">Total Issues</p>
+          <p className="text-white text-[32px] font-bold tracking-tighter leading-none relative z-10">{reports.length}</p>
+        </div>
+        <div className="bento-glass-sm p-4 relative overflow-hidden group col-span-1 rounded-2xl border-amber-500/20 bg-amber-500/5">
+          <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent"></div>
+          <p className="text-amber-500/70 text-[12px] font-semibold uppercase tracking-wider mb-2 relative z-10">Pending</p>
+          <p className="text-amber-400 text-[32px] font-bold tracking-tighter leading-none relative z-10">{urgentQueue.length}</p>
+        </div>
+        <div className="bento-glass-sm p-4 relative overflow-hidden group col-span-1 rounded-2xl border-sky-500/20 bg-sky-500/5">
+          <div className="absolute inset-0 bg-gradient-to-br from-sky-500/10 to-transparent"></div>
+          <p className="text-sky-500/70 text-[12px] font-semibold uppercase tracking-wider mb-2 relative z-10">Dispatched</p>
+          <p className="text-sky-400 text-[32px] font-bold tracking-tighter leading-none relative z-10">{dispatchedQueue.length}</p>
+        </div>
+        <div className="bento-glass-sm p-4 relative overflow-hidden group col-span-1 rounded-2xl border-emerald-500/20 bg-emerald-500/5">
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent"></div>
+          <p className="text-emerald-500/70 text-[12px] font-semibold uppercase tracking-wider mb-2 relative z-10">Resolved</p>
+          <p className="text-emerald-400 text-[32px] font-bold tracking-tighter leading-none relative z-10">{reports.filter(r => r.status === 'resolved').length}</p>
+        </div>
+      </div>
+
+      {/* 2. AI Insight Widget */}
+      <div className="bento-glass mb-8 p-5 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-sky-500/10 via-indigo-500/10 to-transparent"></div>
+        <div className="flex gap-4 items-start relative z-10">
+          <div className="w-10 h-10 rounded-full bg-sky-500/20 flex items-center justify-center shrink-0">
+            <span className="text-[18px]">✨</span>
+          </div>
+          <div>
+            <h3 className="text-white font-semibold text-[16px] tracking-tight mb-1">AI Insight</h3>
+            <p className="text-[#aaa] text-[13px] leading-relaxed">
+              Detected a <strong className="text-sky-400 font-medium">30% surge</strong> in pothole complaints near Cyber City over the last 48 hours. Suggesting preemptive road repair deployment.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. Urgent Queue (Glassmorphism List) */}
       <div className="mb-20">
-        <h2 className="text-[14px] font-medium text-[#666] mb-6 flex items-center gap-2">
-          <AlertTriangle size={14} className="text-[#888]" /> Urgent Queue
-        </h2>
-        {urgentQueue.length === 0 ? (
-          <p className="text-[#444] text-sm">Queue is clear.</p>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-[18px] font-bold text-white tracking-tight">Urgent Actions</h2>
+          <span className="text-[11px] text-amber-500 font-medium px-2.5 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full flex items-center gap-1.5">
+            <AlertTriangle size={12} /> Needs Dispatch
+          </span>
+        </div>
+           {urgentQueue.length === 0 ? (
+          <div className="bento-glass-sm p-8 text-center text-[#666]">
+            Queue is clear. Great job!
+          </div>
         ) : (
-          <AnimatedList
-            items={urgentQueue}
-            displayScrollbar={true}
-            className="w-full space-y-3"
-            renderItem={(report) => {
+          <div className="space-y-3">
+            <AnimatedList items={urgentQueue} displayScrollbar={false} className="w-full space-y-3" renderItem={(report) => {
               const isExpanded = expandedReportId === report.id;
               return (
                 <div 
-                  className={`border ${isExpanded ? 'border-[#444] bg-[#0a0a0a]' : 'border-[#222] bg-[#111]'} rounded-xl overflow-hidden cursor-pointer transition-colors`}
+                  className={`bento-glass-sm p-4 cursor-pointer transition-all ${isExpanded ? 'bg-white/10' : 'bg-[#0a0a0a]'}`}
                   onClick={() => setExpandedReportId(isExpanded ? null : report.id)}
                 >
-                  <div className="p-5">
-                    <div className="flex items-start gap-4">
-                      <span className="text-[16px] mt-0.5">{CATEGORY_CONFIG[report.category]?.emoji}</span>
-                      <div className="flex-1">
-                        <div className="flex justify-between items-center mb-1">
-                          <p className="text-white text-[15px] font-medium tracking-tight">
-                            {CATEGORY_CONFIG[report.category]?.label}
-                          </p>
-                          {report.severity === 'high' && <span className="bg-red-500/10 text-red-400 text-[10px] px-1.5 py-0.5 rounded font-medium">Critical</span>}
-                        </div>
-                        <p className="text-[#666] text-[13px]">{getDummyLocation(report.id)}</p>
-                        
-                        <div className="flex items-center gap-4 text-[12px] mt-3 text-[#555]">
-                          <span>Trust: <span className="text-[#eee]">{report.ai_confidence || 0}%</span></span>
-                          <span className="text-[#333]">•</span>
-                          <span>Confirms: <span className="text-[#eee]">{report.confirmation_count || 0}</span></span>
-                        </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-[18px] shrink-0 border border-white/10">
+                      {CATEGORY_CONFIG[report.category]?.emoji || '🚧'}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex justify-between items-start mb-1">
+                        <p className="text-white font-semibold text-[15px] tracking-tight">{CATEGORY_CONFIG[report.category]?.label || 'Issue'}</p>
+                        {report.severity === 'high' && <span className="bg-red-500/20 text-red-400 text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider border border-red-500/30">Critical</span>}
+                      </div>
+                      <p className="text-[#888] text-[13px] mb-2">{getDummyLocation(report.id)}</p>
+                      <div className="flex items-center gap-3 text-[11px] font-semibold tracking-wider text-[#666] uppercase">
+                        <span>Trust <span className="text-sky-400">{report.ai_confidence || 0}%</span></span>
+                        <span className="w-1 h-1 rounded-full bg-[#333]"></span>
+                        <span>Confirms <span className="text-emerald-400">{report.confirmation_count || 0}</span></span>
                       </div>
                     </div>
-                    {isExpanded && (
-                      <DispatchActionPanel 
-                        reportId={report.id}
-                        category={report.category}
-                        onDispatch={(id) => handleStatusChange(id, 'in_progress')} 
-                      />
-                    )}
                   </div>
+                  {isExpanded && (
+                    <DispatchActionPanel 
+                      reportId={report.id}
+                      category={report.category}
+                      onDispatch={(id) => handleStatusChange(id, 'in_progress')} 
+                    />
+                  )}
                 </div>
               );
-            }}
-          />
+            }} />
+          </div>
         )}
-      </div>
-
-      {/* Suggested Routes (Top 3 Urgent Issues) - Minimal list format */}
-      <div className="mb-20">
-        <h2 className="text-[14px] font-medium text-[#666] mb-6 flex items-center gap-2">
-          <Route size={14} className="text-[#888]" /> Suggested Routes
-        </h2>
-        <div className="space-y-4">
-          {top3Urgent.length === 0 ? (
-            <p className="text-[#444] text-[13px]">No urgent issues to route.</p>
-          ) : top3Urgent.map((report, idx) => (
-             <div key={report.id} className="flex gap-4 items-start">
-               <div className="mt-1 text-[#666] font-medium text-[12px] w-4">
-                 #{idx + 1}
-               </div>
-               <div className="flex-1">
-                 <p className="text-[#eee] text-[14px] tracking-tight leading-snug">
-                   Send <span className="text-white font-medium">Team {['A','B','C'][idx]}</span> to <span className="text-white font-medium">{getDummyLocation(report.id)}</span> for {CATEGORY_CONFIG[report.category]?.label.toLowerCase()}.
-                 </p>
-                 <p className="text-[#666] text-[13px] mt-1.5">
-                   Team is <span className="text-[#888]">{getDummyDistance(report.id)} away</span>
-                 </p>
-               </div>
-             </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Teams Availability Section (Horizontal snap rhythm) */}
-      <div className="mb-20">
-        <h2 className="text-[14px] font-medium text-[#666] mb-6 flex items-center gap-2">
-          <Users size={14} className="text-[#888]" /> Teams Availability
-        </h2>
-        <div className="flex gap-4 overflow-x-auto pb-4 -mx-6 px-6 snap-x hide-scrollbar">
-          {TEAMS_DATA.map(team => {
-            const isExpanded = expandedReportId === `team-${team.id}`;
-            const availableCount = team.units.filter(u => u.status === 'available').length;
-            
-            return (
-              <MagicCard key={team.id} className="min-w-[240px] snap-start rounded-xl h-full">
-                <div className="bg-[#111] border border-[#222] rounded-xl h-full flex flex-col">
-                  <div className="p-5 border-b border-[#222]">
-                    <p className="text-white font-medium text-[14px] tracking-tight mb-1">{team.name}</p>
-                    <p className="text-[#666] text-[12px]">{availableCount} / {team.units.length} Units Available</p>
-                  </div>
-                  
-                  <div className="p-3 space-y-1 flex-1">
-                    {team.units.map(unit => (
-                      <div key={unit.name} className="flex justify-between items-center p-2 rounded-lg">
-                        <span className="text-[#aaa] text-[13px]">{unit.name}</span>
-                        {unit.status === 'available' && <span className="text-emerald-500 text-[10px] font-medium bg-emerald-500/10 px-1.5 py-0.5 rounded">Ready</span>}
-                        {unit.status === 'busy' && <span className="text-sky-500 text-[10px] font-medium bg-sky-500/10 px-1.5 py-0.5 rounded">ETA {unit.eta}</span>}
-                        {unit.status === 'dispatched' && <span className="text-[#888] text-[10px] font-medium bg-[#222] px-1.5 py-0.5 rounded">In Field</span>}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </MagicCard>
-            );
-          })}
-        </div>
       </div>
 
       {/* Currently Dispatched Teams Queue */}

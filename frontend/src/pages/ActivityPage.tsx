@@ -76,206 +76,97 @@ const getStepState = (currentStatus: string, stepKey: string) => {
 
 export default function ActivityPage() {
   const [expandedReportId, setExpandedReportId] = useState<string | null>(null);
-  const [statsExpanded, setStatsExpanded] = useState(false);
 
   return (
-    <div className="p-6 pt-12 pb-32 min-h-screen text-[#ededed] selection:bg-sky-500/30" style={{ maxWidth: 500, margin: '0 auto', backgroundColor: '#000' }}>
+    <div className="p-5 pt-12 pb-32 min-h-screen text-[#ededed] selection:bg-sky-500/30 font-sans" style={{ maxWidth: 500, margin: '0 auto', backgroundColor: '#000' }}>
       
       {/* Page Title */}
-      <h1 className="text-[28px] font-semibold tracking-tight mb-10">Activity</h1>
+      <h1 className="text-[32px] font-bold tracking-tight mb-6 text-white">Activity</h1>
 
-      {/* 1. Stats Card — tap to expand */}
-      <div className="mb-20">
-        <AnimatePresence mode="wait">
-          {!statsExpanded ? (
-            // ── Collapsed: single card with 3 numbers ──
-            <motion.div
-              key="collapsed"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.25 }}
-            >
-              <MagicCard className="rounded-2xl w-full" clickEffect={false}>
-                <div
-                  className="bg-[#111] border border-[#222] rounded-2xl relative cursor-pointer select-none overflow-hidden"
-                  onClick={() => setStatsExpanded(true)}
-                >
-                  <div className="flex items-center justify-between p-6 pb-8">
-                    <div className="flex flex-col items-center flex-1">
-                      <p className="text-[32px] font-semibold tracking-tighter leading-none text-white">{STATS.submitted}</p>
-                      <p className="text-[#666] text-[12px] font-medium mt-2 text-center">Submitted</p>
-                    </div>
-                    <div className="w-px h-10 bg-[#222]" />
-                    <div className="flex flex-col items-center flex-1">
-                      <p className="text-[32px] font-semibold tracking-tighter leading-none text-emerald-400">{STATS.resolved}</p>
-                      <p className="text-[#666] text-[12px] font-medium mt-2 text-center">Resolved</p>
-                    </div>
-                    <div className="w-px h-10 bg-[#222]" />
-                    <div className="flex flex-col items-center flex-1">
-                      <p className="text-[32px] font-semibold tracking-tighter leading-none text-sky-400">{STATS.verified}</p>
-                      <p className="text-[#666] text-[12px] font-medium mt-2 text-center leading-tight">Verified<br />by You</p>
-                    </div>
-                  </div>
-                  <div className="absolute bottom-1.5 left-0 right-0 flex justify-center text-[#444] pointer-events-none">
-                    <ChevronDown size={16} />
-                  </div>
-                </div>
-              </MagicCard>
-            </motion.div>
-          ) : (
-            // ── Expanded: 3 individual cards stacked ──
-            <motion.div
-              key="expanded"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.25 }}
-              className="flex flex-col gap-3"
-            >
-              {[
-                {
-                  count: STATS.submitted,
-                  color: 'text-white',
-                  accent: 'bg-white/5',
-                  title: 'You put it on the map.',
-                  sub: 'Every issue you reported is a step toward a better city.',
-                },
-                {
-                  count: STATS.resolved,
-                  color: 'text-emerald-400',
-                  accent: 'bg-emerald-500/8',
-                  title: 'Real change, thanks to you.',
-                  sub: 'These fixes happened because you spoke up. The city heard you.',
-                },
-                {
-                  count: STATS.verified,
-                  color: 'text-sky-400',
-                  accent: 'bg-sky-500/8',
-                  title: 'You made it count.',
-                  sub: 'Your on-ground verification gave these issues the credibility to act on.',
-                },
-              ].map((item, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.07, duration: 0.3 }}
-                >
-                  <MagicCard className="rounded-xl w-full" clickEffect={false}>
-                    <div
-                      className="bg-[#111] border border-[#222] rounded-xl px-5 py-5 flex items-center gap-5 cursor-pointer"
-                      onClick={() => i === 0 && setStatsExpanded(false)}
-                    >
-                      <div className={`w-14 h-14 rounded-xl ${item.accent} flex items-center justify-center shrink-0`}>
-                        <p className={`text-[26px] font-bold tracking-tighter leading-none ${item.color}`}>{item.count}</p>
-                      </div>
-                      <div>
-                        <p className="text-white text-[15px] font-semibold tracking-tight leading-snug">{item.title}</p>
-                        <p className="text-[#555] text-[12px] mt-1 leading-relaxed">{item.sub}</p>
-                      </div>
-                    </div>
-                  </MagicCard>
-                </motion.div>
-              ))}
-              <button
-                onClick={() => setStatsExpanded(false)}
-                className="text-[#444] text-[12px] font-medium text-center py-2 hover:text-[#666] transition-colors"
-              >
-                Collapse
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* 2. Recent Updates (No borders, massive spacing) */}
-      <div className="mb-20">
-        <h2 className="text-[14px] font-medium text-[#666] mb-8">Recent Updates</h2>
-        <div className="space-y-8 pl-1">
-          {UPDATES.map((update) => (
-            <div key={update.id} className="flex gap-4 items-start">
-              <div className="mt-1">
-                {update.type === 'success' && <div className="w-2 h-2 rounded-full bg-emerald-500"></div>}
-                {update.type === 'info' && <div className="w-2 h-2 rounded-full bg-sky-500"></div>}
-                {update.type === 'resolved' && <div className="w-2 h-2 rounded-full bg-emerald-500 ring-4 ring-emerald-500/20"></div>}
-              </div>
-              <div className="flex-1">
-                <p className="text-[15px] text-[#ddd] leading-snug tracking-tight">{update.text}</p>
-                <p className="text-[13px] text-[#666] mt-1.5">{update.time}</p>
-              </div>
-            </div>
-          ))}
+      {/* 1. Bento Stats Grid */}
+      <div className="grid grid-cols-3 gap-3 mb-8">
+        <div className="bento-glass-sm p-4 flex flex-col items-center justify-center text-center relative overflow-hidden group col-span-1 rounded-2xl border border-white/5 bg-white/5">
+          <div className="absolute inset-0 bg-gradient-to-t from-white/5 to-transparent"></div>
+          <p className="text-white text-[32px] font-bold tracking-tighter leading-none z-10">{STATS.submitted}</p>
+          <p className="text-[#888] text-[11px] font-semibold mt-1 uppercase tracking-wider z-10">Submitted</p>
+        </div>
+        <div className="bento-glass-sm p-4 flex flex-col items-center justify-center text-center relative overflow-hidden group col-span-1 rounded-2xl border border-emerald-500/20 bg-emerald-500/5">
+          <div className="absolute inset-0 bg-gradient-to-t from-emerald-500/10 to-transparent"></div>
+          <p className="text-emerald-400 text-[32px] font-bold tracking-tighter leading-none z-10">{STATS.resolved}</p>
+          <p className="text-emerald-500/70 text-[11px] font-semibold mt-1 uppercase tracking-wider z-10">Resolved</p>
+        </div>
+        <div className="bento-glass-sm p-4 flex flex-col items-center justify-center text-center relative overflow-hidden group col-span-1 rounded-2xl border border-sky-500/20 bg-sky-500/5">
+          <div className="absolute inset-0 bg-gradient-to-t from-sky-500/10 to-transparent"></div>
+          <p className="text-sky-400 text-[32px] font-bold tracking-tighter leading-none z-10">{STATS.verified}</p>
+          <p className="text-sky-500/70 text-[11px] font-semibold mt-1 uppercase tracking-wider z-10">Verified</p>
         </div>
       </div>
 
-      {/* 3. My Submitted Reports */}
-      <div className="mb-20">
-        <h2 className="text-[14px] font-medium text-[#666] mb-6">Active Reports</h2>
-        <div className="space-y-4">
-          {MY_REPORTS.map(report => {
+      {/* 2. My Reports */}
+      <div className="mb-10">
+        <h2 className="text-[18px] font-bold text-white tracking-tight mb-4">My Reports</h2>
+        <div className="space-y-3">
+          {MY_REPORTS.map((report) => {
             const isExpanded = expandedReportId === report.id;
             return (
-              <MagicCard key={report.id} className="rounded-xl w-full">
+              <div key={report.id} className="bento-glass p-5 transition-all duration-300 rounded-2xl border border-white/10 bg-[#0a0a0a]">
                 <div 
-                  className="bg-[#0a0a0a] border border-[#222] rounded-xl overflow-hidden cursor-pointer w-full"
+                  className="flex items-start justify-between cursor-pointer select-none"
                   onClick={() => setExpandedReportId(isExpanded ? null : report.id)}
                 >
-                  <div className="p-5 flex items-center gap-4">
-                    <span className="text-[16px]">{report.emoji}</span>
-                    <div className="flex-1">
-                      <p className="text-[15px] text-[#eee] font-medium tracking-tight leading-tight">{report.category}</p>
-                      <p className="text-[#666] text-[13px] mt-1">{report.location}</p>
+                  <div className="flex gap-3 items-center">
+                    <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[20px]">
+                      {report.emoji}
                     </div>
-                    <div className="flex items-center gap-3">
-                      <span className="text-[13px] font-medium text-[#888]">{report.statusLabel}</span>
-                      <ChevronDown size={14} className={`text-[#666] transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+                    <div>
+                      <p className="text-white font-semibold text-[16px] tracking-tight">{report.category}</p>
+                      <p className="text-[#888] text-[13px]">{report.location}</p>
                     </div>
                   </div>
-
-                  <AnimatePresence>
-                    {isExpanded && (
-                      <motion.div 
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="border-t border-[#222] bg-[#050505]"
-                      >
-                        <div className="p-6 pt-8 pb-8 pl-8">
-                          <div className="relative">
-                            {/* Vertical Line */}
-                            <div className="absolute left-[3px] top-2 bottom-2 w-[1px] bg-[#333]"></div>
-                            
-                            <div className="space-y-7 relative z-10">
-                              {STATUS_STEPS.map((step) => {
-                                const state = getStepState(report.status, step.key);
-                                return (
-                                  <div key={step.key} className="flex gap-5 items-center">
-                                    <div className="bg-[#050505] py-1">
-                                      <div className={`w-1.5 h-1.5 rounded-full ${
-                                        state === 'completed' ? 'bg-[#555]' :
-                                        state === 'current' ? 'bg-sky-500 ring-4 ring-sky-500/20' :
-                                        'bg-[#222]'
-                                      }`}></div>
-                                    </div>
-                                    <span className={`text-[14px] tracking-tight ${
-                                      state === 'completed' ? 'text-[#888]' :
-                                      state === 'current' ? 'text-sky-500 font-medium' :
-                                      'text-[#444]'
-                                    }`}>
-                                      {step.label}
-                                    </span>
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  <div className="flex flex-col items-end gap-2">
+                    <span className={`text-[11px] font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider ${
+                      report.status === 'in_progress' ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20' :
+                      report.status === 'resolved' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                      'bg-sky-500/10 text-sky-400 border border-sky-500/20'
+                    }`}>
+                      {report.statusLabel}
+                    </span>
+                    <ChevronDown size={14} className={`text-[#666] transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+                  </div>
                 </div>
-              </MagicCard>
+
+                {isExpanded && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    className="mt-6 pt-5 border-t border-white/10"
+                  >
+                    <div className="flex justify-between items-center relative">
+                      <div className="absolute left-0 right-0 top-[14px] h-[2px] bg-white/5 z-0" />
+                      {STATUS_STEPS.map((step) => {
+                        const state = getStepState(report.status, step.key);
+                        return (
+                          <div key={step.key} className="relative z-10 flex flex-col items-center gap-2 group w-16">
+                            <div className={`w-7 h-7 rounded-full flex items-center justify-center text-[12px] transition-colors border-2 ${
+                              state === 'completed' ? 'bg-sky-500 border-sky-500 text-white' :
+                              state === 'current' ? 'bg-[#111] border-sky-500 text-sky-500' :
+                              'bg-[#111] border-[#333] text-[#555]'
+                            }`}>
+                              {state === 'completed' ? <CheckCircle2 size={14} /> : <span className="w-2 h-2 rounded-full bg-current" />}
+                            </div>
+                            <span className={`text-[10px] font-medium text-center leading-tight ${
+                              state === 'upcoming' ? 'text-[#555]' : 'text-[#aaa]'
+                            }`}>
+                              {step.label}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                )}
+              </div>
             );
           })}
         </div>

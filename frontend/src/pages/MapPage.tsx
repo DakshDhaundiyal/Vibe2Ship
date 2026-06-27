@@ -215,26 +215,26 @@ export default function MapPage() {
   return (
     <div className="relative w-full" style={{ height: 'calc(100vh - 56px - 64px)' }}>
       {/* Top Floating Filters & Stats */}
-      <div className="absolute top-0 left-0 right-0 z-[400] flex flex-col gap-2 p-3 pointer-events-none">
+      <div className="absolute top-0 left-0 right-0 z-[400] flex flex-col gap-3 p-4 pointer-events-none">
         
         {/* Statistics Bar */}
-        <div className="glass-card flex items-center justify-between px-4 py-3 rounded-2xl pointer-events-auto" style={{ border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(10,15,30,0.85)' }}>
+        <div className="bento-glass-sm flex items-center justify-between px-5 py-3 pointer-events-auto">
           <div className="flex flex-col">
-            <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Open Issues</span>
-            <span className="text-white font-black text-lg">{filteredReports.length}</span>
+            <span className="text-[#888] text-[10px] font-bold uppercase tracking-wider">Open Issues</span>
+            <span className="text-white font-black text-[22px] leading-tight">{filteredReports.length}</span>
           </div>
-          <div className="h-8 w-[1px] bg-white/10 mx-4"></div>
+          <div className="h-10 w-[1px] bg-white/10 mx-4"></div>
           <div className="flex flex-col text-right">
             <span className="text-red-400 text-[10px] font-bold uppercase tracking-wider">Critical</span>
-            <span className="text-red-400 font-black text-lg">{filteredReports.filter(r => r.severity === 'high').length}</span>
+            <span className="text-red-400 font-black text-[22px] leading-tight">{filteredReports.filter(r => r.severity === 'high').length}</span>
           </div>
         </div>
 
         {/* Filters */}
-        <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar pointer-events-auto">
+        <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 snap-x hide-scrollbar pointer-events-auto">
           <button 
             onClick={() => setFilterCategory('all')}
-            className={`flex-shrink-0 px-4 py-2 rounded-full text-xs font-bold transition-all ${filterCategory === 'all' ? 'bg-sky-500 text-white shadow-[0_0_15px_rgba(14,165,233,0.5)]' : 'bg-slate-800/80 text-slate-300 border border-slate-700 backdrop-blur-md hover:bg-slate-700'}`}
+            className={`flex-shrink-0 px-5 py-2.5 rounded-full text-[13px] font-bold transition-all snap-start ${filterCategory === 'all' ? 'bg-sky-500 text-white border-transparent' : 'bento-glass-sm border border-white/10 text-[#aaa] hover:bg-white/5'}`}
           >
             All
           </button>
@@ -242,7 +242,7 @@ export default function MapPage() {
             <button 
               key={k}
               onClick={() => setFilterCategory(k)}
-              className={`flex-shrink-0 px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2 transition-all ${filterCategory === k ? 'bg-sky-500 text-white shadow-[0_0_15px_rgba(14,165,233,0.5)]' : 'bg-slate-800/80 text-slate-300 border border-slate-700 backdrop-blur-md hover:bg-slate-700'}`}
+              className={`flex-shrink-0 px-4 py-2.5 rounded-full text-[13px] font-bold flex items-center gap-2 transition-all snap-start ${filterCategory === k ? 'bg-sky-500 text-white border-transparent' : 'bento-glass-sm border border-white/10 text-[#aaa] hover:bg-white/5'}`}
             >
               <span>{v.emoji}</span> {v.label}
             </button>
