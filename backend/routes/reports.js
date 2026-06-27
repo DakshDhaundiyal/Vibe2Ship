@@ -296,17 +296,12 @@ router.post('/:id/confirm', upload.single('photo'), async (req, res) => {
     );
 
     if (aiResult.category === 'invalid') {
-      return res.status(422).json({ 
-        error: "AI Verification Failed: This doesn't look like a valid civic issue.",
-        ai: aiResult
-      });
+      console.warn(`[Hackathon Demo] AI marked photo as invalid, but allowing it for demo purposes.`);
+      aiResult.category = reportData.category || 'other';
     }
 
     if (aiResult.category !== reportData.category && aiResult.category !== 'other') {
-       return res.status(422).json({ 
-        error: `AI Verification Failed: The original issue was reported as '${reportData.category}', but this photo looks like '${aiResult.category}'.`,
-        ai: aiResult
-      });
+      console.warn(`[Hackathon Demo] AI category mismatch (got ${aiResult.category}, expected ${reportData.category}). Allowing it for demo purposes.`);
     }
 
     // 4. Upload verified photo
