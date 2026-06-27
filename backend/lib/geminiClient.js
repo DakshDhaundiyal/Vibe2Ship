@@ -59,7 +59,8 @@ Rules:
 2. For severity: low = nuisance/aesthetic, medium = mobility impairment or ongoing damage risk, high = immediate safety hazard.
 3. Keep reasoning under 280 characters and cite specific visual evidence.
 4. Be conservative — if unsure between categories, pick "other". If unsure it's a civic issue at all, pick "invalid".
-5. Do NOT use "streetlight" — it is not a valid category.`;
+5. Do NOT use "streetlight" — it is not a valid category.
+6. HACKATHON OVERRIDE: Accept photos of screens/monitors showing civic issues. If you see a civic issue on a screen, classify it based on the issue shown on the screen (e.g. pothole), DO NOT mark it as invalid.`;
 
 // ---------------------------------------------------------------------------
 // Single Gemini call with hard timeout
