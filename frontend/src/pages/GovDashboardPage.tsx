@@ -194,27 +194,28 @@ export default function GovDashboardPage() {
         </div>
       </div>
 
-      {/* 1. Metrics Bento Grid (2x2) */}
-      <div className="grid grid-cols-2 gap-3 mb-8">
-        <div className="bento-glass-sm p-4 relative overflow-hidden group col-span-1 rounded-2xl">
-          <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
+      {/* 1. Metrics Layout */}
+      <div className="mb-8 flex flex-col gap-3">
+        {/* Total Issues Rectangle */}
+        <div className="bento-glass-sm p-5 relative overflow-hidden group rounded-2xl w-full">
           <p className="text-[#888] text-[12px] font-semibold uppercase tracking-wider mb-2 relative z-10">Total Issues</p>
-          <p className="text-white text-[32px] font-bold tracking-tighter leading-none relative z-10">{reports.length}</p>
+          <p className="text-white text-[36px] font-bold tracking-tighter leading-none relative z-10">{reports.length}</p>
         </div>
-        <div className="bento-glass-sm p-4 relative overflow-hidden group col-span-1 rounded-2xl border-amber-500/20 bg-amber-500/5">
-          <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent"></div>
-          <p className="text-amber-500/70 text-[12px] font-semibold uppercase tracking-wider mb-2 relative z-10">Pending</p>
-          <p className="text-amber-400 text-[32px] font-bold tracking-tighter leading-none relative z-10">{urgentQueue.length}</p>
-        </div>
-        <div className="bento-glass-sm p-4 relative overflow-hidden group col-span-1 rounded-2xl border-sky-500/20 bg-sky-500/5">
-          <div className="absolute inset-0 bg-gradient-to-br from-sky-500/10 to-transparent"></div>
-          <p className="text-sky-500/70 text-[12px] font-semibold uppercase tracking-wider mb-2 relative z-10">Dispatched</p>
-          <p className="text-sky-400 text-[32px] font-bold tracking-tighter leading-none relative z-10">{dispatchedQueue.length}</p>
-        </div>
-        <div className="bento-glass-sm p-4 relative overflow-hidden group col-span-1 rounded-2xl border-emerald-500/20 bg-emerald-500/5">
-          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent"></div>
-          <p className="text-emerald-500/70 text-[12px] font-semibold uppercase tracking-wider mb-2 relative z-10">Resolved</p>
-          <p className="text-emerald-400 text-[32px] font-bold tracking-tighter leading-none relative z-10">{reports.filter(r => r.status === 'resolved').length}</p>
+        
+        {/* Pending & Solved Grid */}
+        <div className="grid grid-cols-2 gap-3">
+          {/* Pending Issues (No Glow) */}
+          <div className="bento-glass-sm p-5 relative overflow-hidden group col-span-1 rounded-2xl">
+            <p className="text-[#888] text-[12px] font-semibold uppercase tracking-wider mb-2 relative z-10">Pending Issues</p>
+            <p className="text-white text-[32px] font-bold tracking-tighter leading-none relative z-10">{urgentQueue.length}</p>
+          </div>
+          
+          {/* Issues Solved (With Glow) */}
+          <div className="bento-glass-sm p-5 relative overflow-hidden group col-span-1 rounded-2xl border-emerald-500/20 bg-emerald-500/5">
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent"></div>
+            <p className="text-emerald-500/70 text-[12px] font-semibold uppercase tracking-wider mb-2 relative z-10">Issues Solved</p>
+            <p className="text-emerald-400 text-[32px] font-bold tracking-tighter leading-none relative z-10">{reports.filter(r => r.status === 'resolved').length}</p>
+          </div>
         </div>
       </div>
 
