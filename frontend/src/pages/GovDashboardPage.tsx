@@ -287,47 +287,49 @@ export default function GovDashboardPage() {
       </div>
 
       {/* Currently Dispatched Teams Queue */}
-      <div className="mb-20">
-        <h2 className="text-[14px] font-medium text-[#666] mb-6 flex items-center gap-2">
-          <Truck size={14} className="text-[#888]" /> Currently Dispatched
-        </h2>
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-[18px] font-bold text-white tracking-tight">In the Field</h2>
+          <span className="text-[11px] text-sky-400 font-medium px-2.5 py-1 bg-sky-500/10 border border-sky-500/20 rounded-full flex items-center gap-1.5">
+            <Truck size={12} /> Dispatched
+          </span>
+        </div>
         {dispatchedQueue.length === 0 ? (
-          <p className="text-[#444] text-[13px]">No teams currently in the field.</p>
+          <div className="bento-glass-sm p-8 text-center text-[#666]">No teams currently in the field.</div>
         ) : (
           <AnimatedList
             items={dispatchedQueue}
-            displayScrollbar={true}
+            displayScrollbar={false}
             className="w-full space-y-3"
             renderItem={(report) => {
               const isExpanded = expandedReportId === report.id;
               return (
                 <div 
-                  className={`p-5 border ${isExpanded ? 'border-[#444] bg-[#0a0a0a]' : 'border-[#222] bg-[#111]'} rounded-xl cursor-pointer transition-colors`}
+                  className={`bento-glass-sm p-4 cursor-pointer transition-all ${isExpanded ? 'bg-white/10' : ''}`}
                   onClick={() => setExpandedReportId(isExpanded ? null : report.id)}
                 >
                   <div className="flex items-start gap-4">
-                    <span className="text-[16px] mt-0.5">{CATEGORY_CONFIG[report.category]?.emoji}</span>
+                    <div className="w-10 h-10 rounded-full bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-[18px] shrink-0">
+                      {CATEGORY_CONFIG[report.category]?.emoji || '🚧'}
+                    </div>
                     <div className="flex-1">
                       <div className="flex justify-between items-center mb-1">
-                        <p className="text-white text-[15px] font-medium tracking-tight">
-                          {CATEGORY_CONFIG[report.category]?.label}
-                        </p>
-                        <span className="text-sky-400 text-[10px] font-medium px-1.5 py-0.5 rounded bg-sky-500/10 flex items-center gap-1.5">
-                           <span className="w-1 h-1 rounded-full bg-sky-400 animate-pulse"></span> IN PROGRESS
+                        <p className="text-white font-semibold text-[15px] tracking-tight">{CATEGORY_CONFIG[report.category]?.label}</p>
+                        <span className="text-sky-400 text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-500/10 border border-sky-500/20 flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse"></span> IN PROGRESS
                         </span>
                       </div>
-                      <p className="text-[#666] text-[13px] mb-3">{getDummyLocation(report.id)}</p>
-                      <p className="text-[#888] text-[12px]">Dispatched: <span className="text-[#ccc]">{getTeamForCategory(report.category).department} - {getTeamForCategory(report.category).unit}</span></p>
+                      <p className="text-[#888] text-[13px] mb-1">{getDummyLocation(report.id)}</p>
+                      <p className="text-[#666] text-[12px]">Team: <span className="text-[#aaa]">{getTeamForCategory(report.category).department}</span></p>
                     </div>
                   </div>
-                  
                   {isExpanded && (
-                    <div className="mt-5 pt-5 border-t border-[#222]">
+                    <div className="mt-4 pt-4 border-t border-white/10">
                       <button 
                         onClick={(e) => { e.stopPropagation(); handleStatusChange(report.id, 'resolved'); }}
-                        className="w-full bg-[#111] hover:bg-[#222] text-[#eee] border border-[#222] font-medium py-2.5 rounded-lg text-[13px] transition-colors flex items-center justify-center gap-2"
+                        className="w-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 font-semibold py-3 rounded-xl text-[14px] transition-colors flex items-center justify-center gap-2"
                       >
-                        <CheckCircle2 size={16} className="text-[#888]" /> Mark Issue Resolved
+                        <CheckCircle2 size={16} /> Mark as Resolved
                       </button>
                     </div>
                   )}
@@ -336,6 +338,74 @@ export default function GovDashboardPage() {
             }}
           />
         )}
+      </div>
+
+      {/* Suggested Routes */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-[18px] font-bold text-white tracking-tight">Suggested Route</h2>
+          <span className="text-[11px] text-indigo-400 font-medium px-2.5 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-full flex items-center gap-1.5">
+            <Route size={12} /> AI Optimized
+          </span>
+        </div>
+        {top3Urgent.length === 0 ? (
+          <div className="bento-glass-sm p-8 text-center text-[#666]">No urgent routes to plan.</div>
+        ) : (
+          <div className="bento-glass p-5 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent"></div>
+            <div className="relative z-10">
+              {top3Urgent.map((report, idx) => (
+                <div key={report.id} className="flex gap-4 items-start relative">
+                  {idx !== top3Urgent.length - 1 && (
+                    <div className="absolute left-[11px] top-7 bottom-[-16px] w-[2px] bg-white/10 z-0" />
+                  )}
+                  <div className="w-6 h-6 rounded-full bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-[11px] font-bold text-indigo-400 shrink-0 mt-1 z-10">
+                    {idx + 1}
+                  </div>
+                  <div className="flex-1 pb-5 last:pb-0">
+                    <p className="text-white font-semibold text-[15px] tracking-tight">{getDummyLocation(report.id)}</p>
+                    <p className="text-[#888] text-[13px] mt-0.5">{CATEGORY_CONFIG[report.category]?.label} · {getDummyDistance(report.id)} away</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Fleet Status */}
+      <div className="mb-20">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-[18px] font-bold text-white tracking-tight">Fleet Status</h2>
+          <span className="text-[11px] text-[#888] font-medium px-2.5 py-1 bg-white/5 border border-white/10 rounded-full flex items-center gap-1.5">
+            <Users size={12} /> {TEAMS_DATA.length} Departments
+          </span>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          {TEAMS_DATA.map(team => {
+            const availableCount = team.units.filter(u => u.status === 'available').length;
+            const isAllBusy = availableCount === 0;
+            return (
+              <div key={team.id} className={`bento-glass-sm p-4 rounded-2xl border ${isAllBusy ? 'border-red-500/20 bg-red-500/5' : 'border-emerald-500/20 bg-emerald-500/5'}`}>
+                <p className="text-white text-[13px] font-semibold tracking-tight mb-3 leading-snug">{team.name}</p>
+                <div className="space-y-1.5 mb-3">
+                  {team.units.map(unit => (
+                    <div key={unit.name} className="flex justify-between items-center">
+                      <span className="text-[#aaa] text-[12px]">{unit.name}</span>
+                      {unit.status === 'available' && <span className="text-emerald-400 text-[10px] font-bold bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 rounded-full">Ready</span>}
+                      {unit.status === 'busy' && <span className="text-amber-400 text-[10px] font-bold bg-amber-500/10 border border-amber-500/20 px-1.5 py-0.5 rounded-full">ETA {unit.eta}</span>}
+                      {unit.status === 'dispatched' && <span className="text-sky-400 text-[10px] font-bold bg-sky-500/10 border border-sky-500/20 px-1.5 py-0.5 rounded-full">In Field</span>}
+                    </div>
+                  ))}
+                </div>
+                <div className="flex items-baseline gap-1 border-t border-white/5 pt-2">
+                  <p className={`text-[24px] font-bold tracking-tighter leading-none ${isAllBusy ? 'text-red-400' : 'text-emerald-400'}`}>{availableCount}</p>
+                  <p className="text-[#666] text-[12px]">/ {team.units.length} free</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
     </div>
